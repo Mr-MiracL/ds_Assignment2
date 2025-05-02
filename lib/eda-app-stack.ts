@@ -2,9 +2,12 @@ import * as cdk from "aws-cdk-lib";
 import * as lambdanode from "aws-cdk-lib/aws-lambda-nodejs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as sqs from "aws-cdk-lib/aws-sqs";
+import * as sns from "aws-cdk-lib/aws-sns";
+import * as subs from "aws-cdk-lib/aws-sns-subscriptions";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3n from "aws-cdk-lib/aws-s3-notifications";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Duration, RemovalPolicy } from "aws-cdk-lib";
 import { Construct } from "constructs";
@@ -78,7 +81,36 @@ export class EDAAppStack extends cdk.Stack {
       })
     );
 
-  
+    const dataTopic = new sns.Topic(this, "MetadataTopic", {
+      displayName: "Image Metadata Topic",
+    });
+
+    const adddataFn = new lambdanode.NodejsFunction(this, "adddataFn", {
+      runtime: lambda.Runtime.NODEJS_22_X,
+      memorySize: 128,
+      timeout: Duration.seconds(5),
+      entry: `${__dirname}/../lambdas/adddata.ts`,
+      environment: {
+        TABLE_NAME: imagesTable.tableName,
+      },
+    });
+
+    imagesTable.grantWriteData(adddataFn);
+
+    dataTopic.addSubscription(
+      new subs.LambdaSubscription(adddataFn, {
+        filterPolicy: {
+          metadata_type: sns.SubscriptionFilter.stringFilter({
+            allowlist: ["Caption", "Date", "Name"],
+          }),
+        },
+      })
+    );
+
+    new cdk.CfnOutput(this, "dataTopicArn", {
+      value: dataTopic.topicArn,
+    });
+
     new cdk.CfnOutput(this, "bucketName", {
       value: Bucket.bucketName,
     });
