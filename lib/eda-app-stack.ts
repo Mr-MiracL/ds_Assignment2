@@ -64,7 +64,7 @@ export class EDAAppStack extends cdk.Stack {
 
     const deleteInvalidFn = new lambdanode.NodejsFunction(this, "deleteInvalidFn", {
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: `${__dirname}/../lambdas/mailer.ts`,
+      entry: `${__dirname}/../lambdas/delete.ts`,
       timeout: Duration.seconds(10),
       memorySize: 128,
     });
