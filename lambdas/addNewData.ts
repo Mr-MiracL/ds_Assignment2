@@ -16,11 +16,6 @@ export const handler: SNSHandler = async (event) => {
 
     const metadataType = snsMsg.MessageAttributes?.metadata_type?.Value;
 
-    if (!id || !value || !metadataType) {
-      console.error("message lost");
-      continue;
-    }
-
     const updateCommand = new UpdateItemCommand({
       TableName: process.env.TABLE_NAME!,
       Key: {
