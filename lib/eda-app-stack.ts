@@ -19,11 +19,11 @@ export class EDAAppStack extends cdk.Stack {
       publicReadAccess: false,
     });
 
-    const DLQ = new sqs.Queue(this, "record-dlq", {
+    const DLQ = new sqs.Queue(this, "delete_queue", {
       retentionPeriod: Duration.days(1),
     });
 
-    const imageQueue = new sqs.Queue(this, "record-queue", {
+    const imageQueue = new sqs.Queue(this, "message_queue", {
       visibilityTimeout: Duration.seconds(30),
       deadLetterQueue: {
         queue: DLQ,
@@ -39,7 +39,7 @@ export class EDAAppStack extends cdk.Stack {
 
     const recordImageFn = new lambdanode.NodejsFunction(this, "recordImageFn", {
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: `${__dirname}/../lambdas/recordImage.ts`,
+      entry: `${__dirname}/../lambdas/processImage.ts`,
       timeout: Duration.seconds(10),
       memorySize: 128,
       environment: {
@@ -64,7 +64,7 @@ export class EDAAppStack extends cdk.Stack {
 
     const deleteInvalidFn = new lambdanode.NodejsFunction(this, "deleteInvalidFn", {
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: `${__dirname}/../lambdas/deleteInvalidImage.ts`,
+      entry: `${__dirname}/../lambdas/mailer.ts`,
       timeout: Duration.seconds(10),
       memorySize: 128,
     });
@@ -78,9 +78,7 @@ export class EDAAppStack extends cdk.Stack {
       })
     );
 
-   
-
-
+  
     new cdk.CfnOutput(this, "bucketName", {
       value: Bucket.bucketName,
     });
