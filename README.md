@@ -17,12 +17,12 @@ This repository contains the implementation of a skeleton design for an applicat
 __Feature:__
 + Photographer:
   + Log new Images - **Completed and Tested**
-  + Upload Trigger Handling (via S3) - **Completed and Tested**
-  + Image Validation (format/size) - **Completed and Tested**
+  + Upload Trigger Handling  - **Completed and Tested**
+  + Image Validation format - **Completed and Tested**
   + Metadata updating - **Completed and Tested**
   + DynamoDB Record Creation - **Completed and Tested**
   + Invalid image removal - **Completed and Tested**
-  + Status Update Mailer (via SES) - **Completed and Tested**
+  + Status Update Mailer via SES - **Completed and Tested**
 + Moderator:
   + Status updating - **Completed and Tested**
   + Reason Logging - **Completed and Tested**
@@ -30,7 +30,7 @@ __Feature:__
 + Messaging & Infrastructure:
   + SNS Topic Configuration - **Completed and Tested**
   + Subscription Filtering - **Completed and Tested**
-  + SQS Dead Letter Queue (DLQ) - **Completed and Tested**
+  + SQS DLQ - **Completed and Tested**
   + IAM Least Privilege Roles - **Completed and Tested**
 + Email (SES):
   + Photographer Confirmation Mail - **Completed and Tested**
