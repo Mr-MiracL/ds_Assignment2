@@ -138,8 +138,8 @@ export class EDAAppStack extends cdk.Stack {
       timeout: Duration.seconds(5),
       entry: `${__dirname}/../lambdas/notifyFunction.ts`,
       environment: {
-        FROM_EMAIL: "FROM_EMAIL",
-        TO_EMAIL: "TO_EMAIL",
+        FROM_EMAIL: "lonel1nessgu@gmail.com",
+        TO_EMAIL: "20109111@mail.wit.ie",
       },
     });
 
@@ -164,8 +164,5 @@ export class EDAAppStack extends cdk.Stack {
       value: Bucket.bucketName,
     });
 
-    new cdk.CfnOutput(this, "tableName", {
-      value: imagesTable.tableName,
-    });
   }
 }
